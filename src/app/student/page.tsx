@@ -1,7 +1,7 @@
 "use client";
 
 import { $authenStore } from "@lib/authenStore";
-import { Course, StrangeEnrollment } from "@lib/types";
+import { StrangeEnrollment } from "@lib/types";
 
 import {
   Button,
