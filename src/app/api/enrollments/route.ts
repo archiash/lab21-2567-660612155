@@ -1,5 +1,5 @@
 import { checkToken } from "@lib/checkToken";
-import { Database, Payload } from "@lib/types";
+import { Payload } from "@lib/types";
 import { NextRequest, NextResponse } from "next/server";
 import { getPrisma } from "@lib/getPrisma";
 
@@ -79,8 +79,39 @@ export const POST = async (request: NextRequest) => {
       { status: 400 }
     );
   }
+  const prisma = getPrisma();
+  const courses = await prisma.course.findUnique({
+    where: { courseNo: courseNo }
+  });
 
-  // Coding in lecture
+  if(!courses){
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Course number does not exist",
+      },
+      { status: 400 }
+    );
+  }
+
+  let enrollments = await prisma.enrollment.findUnique({
+    where:{courseNo_studentId:{courseNo:courseNo, studentId:studentId}}
+  });
+  if(enrollments){
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "You already registered this course",
+      },
+      { status: 400 }
+    );
+  }
+  const enroll = await prisma.enrollment.create({
+    data: {
+      courseNo: courseNo,
+      studentId: studentId
+    }
+  })
 
   return NextResponse.json({
     ok: true,
