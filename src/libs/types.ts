@@ -40,3 +40,9 @@ export interface Database {
   enrollments: Enrollment[];
   users: User[];
 }
+
+export interface StrangeEnrollment{
+  courseNo: string;
+  title: string;
+  course: Course;
+}
