@@ -34,7 +34,7 @@ export default function RootLayout({
     } else {
       //check if token is still valid
       try {
-        const resp = await axios.get("/api/user/checkAuthen", {
+        await axios.get("/api/user/checkAuthen", {
           headers: { Authorization: `Bearer ${token}` },
         });
         $authenStore.set({ token, authenUsername });

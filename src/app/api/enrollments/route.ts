@@ -94,7 +94,7 @@ export const POST = async (request: NextRequest) => {
     );
   }
 
-  let enrollments = await prisma.enrollment.findUnique({
+  const enrollments = await prisma.enrollment.findUnique({
     where:{courseNo_studentId:{courseNo:courseNo, studentId:studentId}}
   });
   if(enrollments){
@@ -106,7 +106,8 @@ export const POST = async (request: NextRequest) => {
       { status: 400 }
     );
   }
-  const enroll = await prisma.enrollment.create({
+
+  await prisma.enrollment.create({
     data: {
       courseNo: courseNo,
       studentId: studentId
@@ -157,7 +158,10 @@ export const DELETE = async (request: NextRequest) => {
   }
 
   const prisma = getPrisma();
-  // Perform data delete
+  await prisma.enrollment.delete({
+    where:{courseNo_studentId:{courseNo:courseNo, studentId:studentId}}
+  }
+  )
 
   return NextResponse.json({
     ok: true,
